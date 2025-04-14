@@ -17,7 +17,7 @@ export default function ProjectPage() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/projects/user/${userId}`);
+      const res = await axios.get(`https://pm-user-be.onrender.com/api/projects/user/${userId}`);
       const data = res.data;
       const matchedProject = data.find(p => p._id === id);
       if (matchedProject) {
@@ -36,7 +36,7 @@ export default function ProjectPage() {
 
   const fetchComments = async (taskId) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/tasks/${taskId}/comments`);
+      const res = await axios.get(`https://pm-user-be.onrender.com/api/tasks/${taskId}/comments`);
       setComments((prev) => ({ ...prev, [taskId]: res.data }));
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -46,7 +46,7 @@ export default function ProjectPage() {
 
   const handleUpdateStatus = async (taskId, newStatus) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/tasks/${taskId}/status`, {
+      const res = await axios.put(`https://pm-user-be.onrender.com/api/tasks/${taskId}/status`, {
         status: newStatus
       });
       const updatedTask = res.data;
@@ -63,7 +63,7 @@ export default function ProjectPage() {
     if (!commentText.trim()) return;
 
     try {
-      await axios.post(`http://localhost:5000/api/tasks/${taskId}/comment`, {
+      await axios.post(`https://pm-user-be.onrender.com/api/tasks/${taskId}/comment`, {
         text: commentText
       });
 

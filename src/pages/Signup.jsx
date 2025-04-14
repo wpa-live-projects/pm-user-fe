@@ -11,7 +11,7 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/users/signup', {
+      const res = await axios.post('https://pm-user-be.onrender.com/api/users/signup', {
         name,
         email,
         password,

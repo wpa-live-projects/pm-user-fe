@@ -30,7 +30,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/users/${userId}`);
+        const res = await axios.get(`https://pm-user-be.onrender.com/api/users/${userId}`);
         setUser(res.data);
         localStorage.setItem('user', JSON.stringify(res.data));
       } catch (err) {
@@ -46,7 +46,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/projects/user/${userId}`);
+        const res = await axios.get(`https://pm-user-be.onrender.com/api/projects/user/${userId}`);
         setProjects(res.data);
       } catch (err) {
         toast.error('Failed to load projects');
@@ -64,7 +64,7 @@ export default function Dashboard() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/users/change-password', {
+      await axios.post('https://pm-user-be.onrender.com/api/users/change-password', {
         userId,
         oldPassword,
         newPassword,
