@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ProjectCard from '../components/ProjectCard';
+import ProjectCard from '../Components/ProjectCard';
 import { toast } from 'react-toastify';
 
 export default function Dashboard() {
