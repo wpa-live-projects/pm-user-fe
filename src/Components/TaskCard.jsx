@@ -18,12 +18,10 @@ export default function TaskCard({ task, onUpdateStatus, showDropdown = false })
   return (
     <div className="bg-white rounded-xl shadow p-4 mb-4">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold text-gray-800">{task.title}</h3>
+        
         <StatusTag status={task.status} />
       </div>
-      <p className="text-gray-600 text-sm mb-2">{task.description}</p>
-      <p className="text-xs text-gray-400">Deadline: {new Date(task.deadline).toLocaleDateString()}</p>
-
+     
       {showDropdown && !isEditing && (
         <button
           onClick={() => setIsEditing(true)}

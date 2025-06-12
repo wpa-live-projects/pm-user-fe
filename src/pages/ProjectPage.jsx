@@ -89,21 +89,23 @@ export default function ProjectPage() {
     .filter(task => (statusFilter === 'All' ? true : task.status === statusFilter));
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-300 to-blue-500 p-8">
       {project && (
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">{project.title}</h1>
-          <p className="text-gray-600 mb-1">{project.description}</p>
-          <p className="text-sm text-gray-500">Deadline: {new Date(project.deadline).toLocaleDateString()}</p>
+        <div className="mb-8 bg-white/90 border-l-8 border-orange-300 p-8 rounded-2xl shadow-2xl backdrop-blur-sm">
+          <h1 className="text-4xl font-bold text-black-400 mb-2">{project.title}</h1>
+          <p className="text-gray-800 mb-2">{project.description}</p>
+          <p className="text-sm text-gray-600">
+            <span className="font-medium">Deadline:</span> {new Date(project.deadline).toLocaleDateString()}
+          </p>
         </div>
       )}
 
-      <h2 className="text-xl font-semibold mb-2">Assigned Tasks</h2>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold text-gray-800">Assigned Tasks</h2>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="border p-2 rounded text-sm"
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-300"
         >
           <option value="All">All</option>
           <option value="To Do">To Do</option>
@@ -112,16 +114,13 @@ export default function ProjectPage() {
         </select>
       </div>
 
-      <div className="grid gap-4 mt-4">
-        {/* Display tasks inside a box with comments */}
+      <div className="grid gap-6">
         {filteredTasks.map(task => (
-          <div key={task._id} className="bg-white rounded-xl shadow p-4 mb-4">
-            {/* Task Card */}
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-semibold text-gray-800">{task.title}</h3>
-              {/* Add StatusTag component here if needed */}
+          <div key={task._id} className="bg-white rounded-xl shadow-md p-6 space-y-3">
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-semibold text-gray-800">{task.title}</h3>
             </div>
-            <p className="text-gray-600 text-sm mb-2">{task.description}</p>
+            <p className="text-gray-700 text-sm">{task.description}</p>
             <p className="text-xs text-gray-400">Deadline: {new Date(task.deadline).toLocaleDateString()}</p>
 
             <TaskCard
@@ -130,43 +129,39 @@ export default function ProjectPage() {
               showDropdown={true}
             />
 
-            {/* Comments section inside the same box */}
-            <div className="mt-2 bg-gray-100 p-3 rounded">
-              <h4 className="text-sm font-semibold text-gray-700 mb-1">Comments:</h4>
+            <div className="bg-gray-100 rounded p-3 mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Comments:</h4>
               {comments[task._id]?.length > 0 ? (
                 comments[task._id].map((comment, index) => (
-                  <div key={index} className="text-sm text-gray-800 border-b py-1">
+                  <div key={index} className="text-sm text-gray-800 border-b py-1 last:border-b-0">
                     {comment.text}
                   </div>
                 ))
               ) : (
-                <div className="text-sm text-gray-500 italic">No comments yet.</div>
+                <p className="text-sm text-gray-500 italic">No comments yet.</p>
               )}
             </div>
 
-            {/* Toggle comment input */}
             <button
-              onClick={() => {
-                const isOpen = !isCommenting[task._id];
-                setIsCommenting((prev) => ({ ...prev, [task._id]: isOpen }));
-              }}
-              className="mt-2 bg-green-500 text-white px-4 py-1 rounded text-sm hover:bg-green-600"
+              onClick={() =>
+                setIsCommenting(prev => ({ ...prev, [task._id]: !prev[task._id] }))
+              }
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md text-sm transition"
             >
               {isCommenting[task._id] ? 'Cancel' : 'Add Comment'}
             </button>
 
-            {/* Comment input */}
             {isCommenting[task._id] && (
-              <div className="mt-2">
+              <div className="mt-3">
                 <textarea
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  className="border p-2 w-full rounded mb-2"
+                  className="w-full p-2 border rounded-md text-sm mb-2 focus:outline-none focus:ring focus:ring-blue-300"
                   placeholder="Write your comment..."
                 />
                 <button
                   onClick={() => handleAddComment(task._id)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition"
                 >
                   Add Comment
                 </button>

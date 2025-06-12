@@ -13,7 +13,6 @@ export default function Dashboard() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  // Load from localStorage
   useEffect(() => {
     if (!userId) {
       toast.error('Unauthorized. Please login.');
@@ -26,7 +25,6 @@ export default function Dashboard() {
     }
   }, [userId, navigate]);
 
-  // Sync latest user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -42,7 +40,6 @@ export default function Dashboard() {
     if (userId) fetchUser();
   }, [userId, navigate]);
 
-  // Fetch projects
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -58,6 +55,7 @@ export default function Dashboard() {
   const handleLogout = () => {
     localStorage.clear();
     toast.success('Logged out');
+    alert('Logged out');
     navigate('/');
   };
 
@@ -79,31 +77,38 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Welcome {user?.name || 'Loading...'}
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 to-blue-600 m-0 p-0">
+      {/* Top bar */}
+      <div className="flex justify-end mb-6 space-x-3">
+        <button
+          onClick={() => setShowChangePassword(!showChangePassword)}
+          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+        >
+          {showChangePassword ? 'Close' : 'Change Password'}
+        </button>
+        <button
+          onClick={handleLogout}
+          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* Welcome Card */}
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-10 text-center mb-12">
+        <p className="text-orange-600 text-6xl font-semibold mb-2">Welcome</p>
+        <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight">
+          {user?.name || 'Loading...'}
         </h1>
-        <div className="space-x-3">
-          <button
-            onClick={() => setShowChangePassword(!showChangePassword)}
-            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-          >
-            {showChangePassword ? 'Close' : 'Change Password'}
-          </button>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
       </div>
 
       {/* Password Change Form */}
       {showChangePassword && (
-        <form onSubmit={handlePasswordChange} className="bg-white shadow p-4 rounded mb-6 w-full max-w-md">
-          <h3 className="text-lg font-semibold mb-4 text-gray-700">Change Password</h3>
+        <form
+          onSubmit={handlePasswordChange}
+          className="bg-white shadow-md p-6 rounded-lg max-w-md mx-auto mb-10"
+        >
+          <h3 className="text-xl font-semibold mb-4 text-gray-700">Change Password</h3>
           <input
             type="password"
             placeholder="Old Password"
@@ -129,20 +134,33 @@ export default function Dashboard() {
         </form>
       )}
 
-      <h2 className="text-xl font-semibold mb-4 text-indigo-700">Your Projects</h2>
-      {projects.length === 0 ? (
-        <p className="text-gray-500">No projects assigned to you yet.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project._id}
-              project={project}
-              onClick={() => navigate(`/project/${project._id}`)}
-            />
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 max-w-5xl mx-auto">
+        {projects.map((project, index) => (
+          <div
+            key={project._id}
+            onClick={() => window.open(`/project/${project._id}`, '_blank')}
+            className="cursor-pointer bg-white border border-orange-400 rounded-2xl shadow-lg p-8 h-56 flex flex-col justify-between transition-transform hover:scale-105 hover:shadow-2xl"
+          >
+            <div>
+              <h3 className="text-2xl font-bold text-orange-600 capitalize mb-2">{project.title}</h3>
+              <p className="text-gray-700 text-base mb-4">{project.description?.substring(0, 70) || 'No description'}</p>
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold">Deadline:</span> {project.deadline?.split('T')[0] || 'N/A'}
+              </p>
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  className="bg-orange-500 text-white px-4 py-2 rounded shadow hover:bg-orange-600 transition"
+                  tabIndex={-1}
+
+                >
+                  View More
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
